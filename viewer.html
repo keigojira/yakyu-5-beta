@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>野球カウントボード</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'DSEG7-Classic-Mini';
+            src: url('DSEG7Classic-Mini.ttf') format('truetype'); /* フォントファイルを読み込む場合 */
+            /* フォントファイルは別途用意してください */
+        }
+    </style>
+</head>
+<body>
+    <div id="big-count-section">
+        <div class="big-count-container">
+            <div class="big-count-item">
+                <div class="big-count-label">BALLS</div>
+                <div class="big-count-value" id="bigBallsCount">0</div>
+            </div>
+            <div class="big-count-item">
+                <div class="big-count-label">STRIKES</div>
+                <div class="big-count-value" id="bigStrikesCount">0</div>
+            </div>
+            <div class="big-count-item">
+                <div class="big-count-label">OUTS</div>
+                <div class="big-count-value" id="bigOutsCount">0</div>
+            </div>
+        </div>
+        </div>
+
+    <script>
+        // 観戦者画面の要素を取得
+        const bigBallsCountElement = document.getElementById('bigBallsCount');
+        const bigStrikesCountElement = document.getElementById('bigStrikesCount');
+        const bigOutsCountElement = document.getElementById('bigOutsCount');
+
+        // localStorageから初期値を読み込み
+        const loadCounts = () => {
+            const storedBalls = localStorage.getItem('balls') || '0';
+            const storedStrikes = localStorage.getItem('strikes') || '0';
+            const storedOuts = localStorage.getItem('outs') || '0';
+
+            bigBallsCountElement.textContent = storedBalls;
+            bigStrikesCountElement.textContent = storedStrikes;
+            bigOutsCountElement.textContent = storedOuts;
+
+            // アクティブクラスの更新 (数字が0でない場合にアクティブにする)
+            if (parseInt(storedBalls) > 0) {
+                bigBallsCountElement.classList.add('active');
+            } else {
+                bigBallsCountElement.classList.remove('active');
+            }
+            if (parseInt(storedStrikes) > 0) {
+                bigStrikesCountElement.classList.add('active');
+            } else {
+                bigStrikesCountElement.classList.remove('active');
+            }
+            if (parseInt(storedOuts) > 0) {
+                bigOutsCountElement.classList.add('active');
+            } else {
+                bigOutsCountElement.classList.remove('active');
+            }
+        };
+
+        // localStorageの変更をリッスンしてUIを更新
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'balls' || event.key === 'strikes' || event.key === 'outs') {
+                loadCounts(); // カウントが変更されたら再読み込み
+            }
+        });
+
+        // ページロード時に初期値を設定
+        document.addEventListener('DOMContentLoaded', loadCounts);
+    </script>
+</body>
+</html>
